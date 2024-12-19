@@ -1,21 +1,24 @@
 <script setup lang="ts">
 // /*1. 渲染headerV 2. 渲染数据（一级，二级，多级表头）V 3. 操作按钮处理V
 //4. 多选处理V 5.自定义列处理V 6. 自适应宽度处理 7.表头筛选处理  8。分页 类型*/
+defineOptions({
+
+  name:"HeTable"
+
+})
 import {
   reactive,
   ref,
   computed,
   onMounted,
   onBeforeUpdate,
-  // onbeforeUpdate
-  useAttrs
 } from "vue";
-const attrs = useAttrs();
 import HeaderTable from "./HeaderTable/index.vue";
 import Operate from "./Operate/index.vue";
-import { deepClone } from "@/utils/index";
-import type { TableColumnCtx, ElTable } from "element-plus";
-import { ElMessage } from "element-plus";
+import {deepClone} from "./utils/index";
+import type {TableColumnCtx, ElTable} from "element-plus";
+import {ElMessage} from "element-plus";
+
 interface Props {
   tableConfig?: any;
   columnData?: any;
@@ -42,6 +45,7 @@ interface Props {
   stripe?: boolean; // 是否显示斑马线
   showTooltip?: boolean; // 是否显示斑马线
 }
+
 const props = withDefaults(defineProps<Props>(), {
   //===配置表头
   columnData: [],
@@ -76,7 +80,8 @@ const props = withDefaults(defineProps<Props>(), {
   // 多选-选择是否禁用条件
   rowSelectCondition: row => true,
   // 合并单元格规则
-  objectSpanMethod: data => {},
+  objectSpanMethod: data => {
+  },
   stripe: true,
   showTooltip: true
 });
@@ -102,14 +107,17 @@ function delHandClick($index: number) {
   console.log("del");
   emit("delHandClick", $index);
 }
+
 function editHandClick($index: number) {
   console.log("edit");
   emit("editHandClick", $index);
 }
+
 function addHandClick($index: number) {
   console.log("add");
   emit("addHandClick", $index);
 }
+
 //---多选事件
 function select(selection: any) {
   if (Boolean(props.maxMultipleNum)) {
@@ -130,6 +138,7 @@ function select(selection: any) {
     idList: idList
   });
 }
+
 function selectAll(selections) {
   if (Boolean(props.maxMultipleNum)) {
     if (selections.length > props.maxMultipleNum) {
@@ -147,13 +156,15 @@ function selectAll(selections) {
     idList: idList
   });
 }
+
 //---合计
 interface SummaryMethodProps<T = any> {
   columns: TableColumnCtx<T>[];
   data: T[];
 }
+
 const getSummaries = (param: SummaryMethodProps) => {
-  const { columns, data } = param;
+  const {columns, data} = param;
   const sums: string[] = [];
   let getMyData = [];
   if (props.hideSummaryList?.length) {
@@ -213,10 +224,10 @@ const getSummaries = (param: SummaryMethodProps) => {
 // };
 //---排序
 function sortChange({
-  column,
-  prop,
-  order
-}: {
+                      column,
+                      prop,
+                      order
+                    }: {
   column: any;
   prop: string;
   order: string;
@@ -236,10 +247,12 @@ function handleCurrentChange(currentPage: number) {
   emit("update:pageNum", currentPage);
   emit("handleCurrentChange", currentPage);
 }
+
 function handleSizeChange(pageSize: number) {
   emit("update:pageSize", pageSize);
   emit("handleCurrentChange", props.pageNum);
 }
+
 const pageSizes = computed(() => {
   let arr = [];
   if (props.total <= 10) {
@@ -262,6 +275,7 @@ interface ColumnDataType {
   prop: string;
   label: string;
 }
+
 const pageData = reactive<{
   columnList: Array<ColumnDataType>;
   showColumnList: Array<ColumnDataType>;
@@ -272,26 +286,29 @@ const pageData = reactive<{
 // const { columnList } = toRefs(pageData);
 const checkAll = ref(false);
 const tableRef = ref<InstanceType<typeof ElTable>>();
+
 //列过滤
 function filterTableList() {
   pageData.showColumnList = pageData.columnList.filter(
-    (item: { initShow: boolean }) => item.initShow
+      (item: { initShow: boolean }) => item.initShow
   );
   // console.log('pageData.showColumnList ', pageData.showColumnList)
   initColumnList();
 }
+
 //初始化列
 function initColumnList() {
   pageData.columnList = props.columnData.map((item: ColumnDataType) => {
     return {
       ...item,
       initShow:
-        item.hasOwnProperty("initShow") && item.initShow === false
-          ? false
-          : true
+          item.hasOwnProperty("initShow") && item.initShow === false
+              ? false
+              : true
     };
   });
 }
+
 //初始化
 onMounted(() => {
   if (props.columnData.length) {
@@ -301,9 +318,9 @@ onMounted(() => {
     filterTableList();
   }
   if (
-    pageData.columnList.every((item: ColumnDataType) => {
-      return item.initShow;
-    })
+      pageData.columnList.every((item: ColumnDataType) => {
+        return item.initShow;
+      })
   ) {
     checkAll.value = true;
   } else {
@@ -331,23 +348,24 @@ function handleCheckAllChange() {
     });
   }
   pageData.showColumnList = pageData.columnList.filter(
-    (item: { initShow: boolean }) => item.initShow
+      (item: { initShow: boolean }) => item.initShow
   );
 }
+
 const handleRowClick = (row: any) => {
   pageData.showColumnList = pageData.columnList.filter(
-    (item: { initShow: boolean }) => item.initShow
+      (item: { initShow: boolean }) => item.initShow
   );
   if (
-    pageData.columnList.some((item: any) => {
-      return item.initShow === false;
-    })
+      pageData.columnList.some((item: any) => {
+        return item.initShow === false;
+      })
   ) {
     checkAll.value = false;
   } else {
     checkAll.value = true;
   }
-  emit("handleRowClick", { ...row });
+  emit("handleRowClick", {...row});
 };
 defineExpose({
   tableRef
@@ -361,9 +379,9 @@ onBeforeUpdate(() => {
     filterTableList();
   }
   if (
-    pageData.columnList.every((item: ColumnDataType) => {
-      return item.initShow;
-    })
+      pageData.columnList.every((item: ColumnDataType) => {
+        return item.initShow;
+      })
   ) {
     checkAll.value = true;
   } else {
@@ -371,6 +389,7 @@ onBeforeUpdate(() => {
   }
   filterTableList(); //过滤
 });
+
 //单选
 function tableCurrentChange(row: any) {
   console.log(row);
@@ -380,7 +399,7 @@ function tableCurrentChange(row: any) {
 /**
  * @desc 给单行设置颜色
  */
-function changRowStyle({ row }) {
+function changRowStyle({row}) {
   if (props.rowClassRowConditions(row)) {
     return props.rowClassName;
   }
@@ -419,11 +438,11 @@ const getSpanArr = (data, spanKey) => {
  * @desc 合并表格列单元格
  */
 const objectSpanMethodHandle = ({
-  row,
-  column,
-  rowIndex,
-  columnIndex // 第几列
-}: SpanMethodProps) => {
+                                  row,
+                                  column,
+                                  rowIndex,
+                                  columnIndex // 第几列
+                                }) => {
   return props.objectSpanMethod({
     row,
     column,
@@ -431,6 +450,7 @@ const objectSpanMethodHandle = ({
     columnIndex // 第几列
   });
 };
+
 /**
  * @desc 右键点击行事件
  */
@@ -458,17 +478,19 @@ function rowContextmenu(row, column, event) {
         <el-dropdown-menu class="dropdown">
           <el-dropdown-item>
             <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
-              >全选</el-checkbox
+            >全选
+            </el-checkbox
             >
           </el-dropdown-item>
           <el-dropdown-item
-            v-for="(item, index) in pageData.columnList"
-            :key="index"
+              v-for="(item, index) in pageData.columnList"
+              :key="index"
           >
             <el-checkbox
-              v-model="item.initShow"
-              @change="handleRowClick({ ...item, index })"
-              >{{ item.label }}</el-checkbox
+                v-model="item.initShow"
+                @change="handleRowClick({ ...item, index })"
+            >{{ item.label }}
+            </el-checkbox
             >
           </el-dropdown-item>
         </el-dropdown-menu>
@@ -477,35 +499,35 @@ function rowContextmenu(row, column, event) {
   </div>
   <div class="base-table virtual">
     <el-table
-      
-      v-bind="{ ...tableConfig }"
-      ref="tableRef"
-      v-loading="loading"
-      :span-method="objectSpanMethodHandle"
-      :row-class-name="changRowStyle"
-      :header-cell-style="{ background: 'rgb(253 253 254)' }"
-      :showSummary="showSummary"
-      :show-overflow-tooltip="showTooltip"
-      sum-text="合计"
-      :border="true"
-      lazy
-      :data="tableData"
-      :stripe="stripe"
-      style="width: 100%"
-      :summary-method="getSummaries"
-      @current-change="tableCurrentChange"
-      @select="select"
-      @select-all="selectAll"
-      @row-click="handleRowClick"
-      @sort-change="sortChange"
-      @row-contextmenu="rowContextmenu"
+
+        v-bind="{ ...tableConfig }"
+        ref="tableRef"
+        v-loading="loading"
+        :span-method="objectSpanMethodHandle"
+        :row-class-name="changRowStyle"
+        :header-cell-style="{ background: 'rgb(253 253 254)' }"
+        :showSummary="showSummary"
+        :show-overflow-tooltip="showTooltip"
+        sum-text="合计"
+        :border="true"
+        lazy
+        :data="tableData"
+        :stripe="stripe"
+        style="width: 100%"
+        :summary-method="getSummaries"
+        @current-change="tableCurrentChange"
+        @select="select"
+        @select-all="selectAll"
+        @row-click="handleRowClick"
+        @sort-change="sortChange"
+        @row-contextmenu="rowContextmenu"
     >
       <!-- 多选 -->
       <el-table-column
-        v-if="showMultiple"
-        :selectable="selectEnable"
-        type="selection"
-        width="55"
+          v-if="showMultiple"
+          :selectable="selectEnable"
+          type="selection"
+          width="55"
       />
       <HeaderTable :columnData="pageData.showColumnList">
         <!-- 操作 -->
@@ -523,20 +545,20 @@ function rowContextmenu(row, column, event) {
         </template>
       </HeaderTable>
       <Operate
-        v-if="showOperate"
-        :loading="loading"
-        :operateWidth="operateWidth"
-        :operateType="operateType"
-        :operateList="operateList"
-        fixed="right"
-        @addHandClick="addHandClick"
-        @delHandClick="delHandClick"
-        @editHandClick="editHandClick"
+          v-if="showOperate"
+          :loading="loading"
+          :operateWidth="operateWidth"
+          :operateType="operateType"
+          :operateList="operateList"
+          fixed="right"
+          @addHandClick="addHandClick"
+          @delHandClick="delHandClick"
+          @editHandClick="editHandClick"
       >
         <!-- 添加更多操作 -->
         <template #more="{ data }">
           <!-- {{ data }} -->
-          <slot name="moreOperate" :data="{ $index: data }" />
+          <slot name="moreOperate" :data="{ $index: data }"/>
         </template>
       </Operate>
     </el-table>
@@ -545,16 +567,16 @@ function rowContextmenu(row, column, event) {
   <div v-show="showPagination" class="pagination">
     <!-- hide-on-single-page 只有一页时隐藏 -->
     <el-pagination
-      :current-page="pageNum"
-      :page-size="pageSize"
-      :page-sizes="pageSizes"
-      :hide-on-single-page="false"
-      :small="false"
-      :disabled="loading"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
+        :current-page="pageNum"
+        :page-size="pageSize"
+        :page-sizes="pageSizes"
+        :hide-on-single-page="false"
+        :small="false"
+        :disabled="loading"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
     />
   </div>
 </template>
@@ -584,6 +606,7 @@ function rowContextmenu(row, column, event) {
 :v-deep(.el-table__body-wrapper) {
   max-height: 57vh !important;
   overflow-y: scroll !important;
+
   &::-webkit-scrollbar {
     width: 0px;
   }
@@ -593,6 +616,7 @@ function rowContextmenu(row, column, event) {
 .base-table.virtual .el-table__body-wrapper {
   max-height: calc(100vh - 350px) !important;
   overflow-y: scroll !important;
+
   &::-webkit-scrollbar {
     width: 0px;
   }

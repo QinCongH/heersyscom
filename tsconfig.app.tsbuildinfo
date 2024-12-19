@@ -1,0 +1,1 @@
+{"root":["./src/main.ts","./src/vite-env.d.ts","./src/components/hetable/utils/index.ts","./src/plugin/index.ts","./src/plugin/componenets/hetable/index.ts","./src/app.vue","./src/components/hetable/index.vue","./src/components/hetable/headertable/index.vue","./src/components/hetable/operate/index.vue"],"errors":true,"version":"5.7.2"}

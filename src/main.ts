@@ -1,6 +1,18 @@
-import { createApp } from 'vue'
+import {createApp} from 'vue'
 import 'element-plus/dist/index.css'
 import ElementPlus from 'element-plus'
-import App from './App.vue'
+import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 
-createApp(App).use(ElementPlus).mount('#app')
+const app = createApp(App)
+for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
+    app.component(key, component)
+}
+// import {HeTable} from "@/plugin/index.ts"
+
+import App from './App.vue'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
+// app.use(HeTable)
+app.use(ElementPlus, {
+    locale: zhCn,
+}).mount('#app')

@@ -10,7 +10,7 @@ interface Props {
   isChildren?: boolean;
   columnData: any;
 }
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   isChildren: false,
   columnData: []
 });
