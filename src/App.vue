@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import {HeTable} from "@/plugin/index.ts"
-
+import HeTable from "@/components/HeTable/index.vue"
 const columns = [
   {
     label: "序号",
@@ -34,7 +33,5 @@ const tableData = [
 ]
 </script>
 <template>
-  <HeTable :total="tableData.length" :column-data="columns" :table-data="tableData"></HeTable>
+  <HeTable pagination-position="right" :total="tableData.length" :column-data="columns" :table-data="tableData"></HeTable>
 </template>
-<style scoped>
-</style>

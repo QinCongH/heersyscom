@@ -1,7 +1,7 @@
 <script setup lang="ts">
 // /*1. 渲染header 2. 渲染数据（一级，二级，多级表头） 3. 操作按钮处理 4. 多选处理 5.自定义列处理 6. 自适应宽度处理 7.表头筛选处理 8.增加行和删除行处理 9.增加列和删除列处理  类型*/
 import { useAttrs } from "vue";
-import { Plus, Edit, Delete } from "@element-plus/icons-vue";
+import {Plus, Edit, Delete, MoreFilled} from "@element-plus/icons-vue";
 const attrs: any = useAttrs();
 console.log("attrs", attrs);
 </script>
@@ -114,6 +114,6 @@ console.log("attrs", attrs);
 }
 
 .operate > div {
-  padding: 0px 5px;
+  padding: 0 5px;
 }
 </style>

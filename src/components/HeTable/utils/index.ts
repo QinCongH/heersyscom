@@ -1,7 +1,7 @@
-export function deepClone(data) {
-    function typeOf(obj) {
+export function deepClone(data:any) {
+    function typeOf(obj:any) {
         const toString = Object.prototype.toString;
-        const map = {
+        const map:any = {
             "[object Boolean]": "boolean",
             "[object Number]": "number",
             "[object String]": "string",
@@ -19,7 +19,7 @@ export function deepClone(data) {
     // 获取传入拷贝函数的数据类型
     const type = typeOf(data);
     // 定义一个返回any类型的数据
-    let reData;
+    let reData:any;
     // 递归遍历一个array类型数据，
     if (type === "array") {
         reData = [];

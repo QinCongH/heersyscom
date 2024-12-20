@@ -3,7 +3,7 @@
 //4. 多选处理V 5.自定义列处理V 6. 自适应宽度处理 7.表头筛选处理  8。分页 类型*/
 defineOptions({
 
-  name:"HeTable"
+  name: "HeTable"
 
 })
 import {
@@ -18,73 +18,9 @@ import Operate from "./Operate/index.vue";
 import {deepClone} from "./utils/index";
 import type {TableColumnCtx, ElTable} from "element-plus";
 import {ElMessage} from "element-plus";
+import {Props, propsData} from "./props"
 
-interface Props {
-  tableConfig?: any;
-  columnData?: any;
-  tableData?: any;
-  showOperate?: boolean;
-  operateType?: number;
-  operateList?: any;
-  operateWidth?: string;
-  showMultiple?: boolean;
-  loading?: boolean;
-  showSummary?: boolean;
-  maxMultipleNum?: number;
-  hideSummaryList?: Array<string>;
-  summaryList?: any;
-  pageNum?: number;
-  pageSize?: number;
-  total?: number;
-  showPagination?: boolean;
-  showMultipleColumn?: boolean; //是否显示多列
-  rowClassRowConditions?: Function; //自动显示行class的条件
-  rowClassName?: string;
-  rowSelectCondition?: Function;
-  objectSpanMethod?: Function;
-  stripe?: boolean; // 是否显示斑马线
-  showTooltip?: boolean; // 是否显示斑马线
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  //===配置表头
-  columnData: [],
-  //====表格数据
-  tableData: [],
-  //====表格配置
-  tableConfig: [],
-  //====最右侧操作
-  showOperate: false,
-  operateType: 0, //操作样式类型
-  operateList: ["edit", "del"],
-  operateWidth: "auto",
-  //====是否多选
-  showMultiple: true,
-  maxMultipleNum: undefined,
-  //====loading
-  loading: false,
-  //表尾合计
-  showSummary: false,
-  hideSummaryList: () => [], //不显示合计的字段
-  summaryList: [], //合计列数据
-  //分页
-  pageNum: 1,
-  pageSize: 10,
-  total: 0,
-  showPagination: true,
-  //多列
-  showMultipleColumn: false,
-  // 表行显示样式
-  rowClassRowConditions: row => false,
-  rowClassName: "",
-  // 多选-选择是否禁用条件
-  rowSelectCondition: row => true,
-  // 合并单元格规则
-  objectSpanMethod: data => {
-  },
-  stripe: true,
-  showTooltip: true
-});
+const props = withDefaults(defineProps<Props>(), propsData);
 const emit = defineEmits([
   "editHandClick",
   "delHandClick",
@@ -302,9 +238,7 @@ function initColumnList() {
     return {
       ...item,
       initShow:
-          item.hasOwnProperty("initShow") && item.initShow === false
-              ? false
-              : true
+          !(item.hasOwnProperty("initShow") && item.initShow === false)
     };
   });
 }
@@ -564,7 +498,14 @@ function rowContextmenu(row, column, event) {
     </el-table>
 
   </div>
-  <div v-show="showPagination" class="pagination">
+  <div v-show="showPagination" :style="{
+    alignItems: 'center',
+    justifyContent:new Map([
+        ['left','flex-start'],
+        ['center','center'],
+        ['right','flex-end'],
+    ]).get(paginationPosition)
+  }" class="pagination">
     <!-- hide-on-single-page 只有一页时隐藏 -->
     <el-pagination
         :current-page="pageNum"
@@ -585,8 +526,6 @@ function rowContextmenu(row, column, event) {
 .pagination {
   width: 100%;
   display: flex;
-  align-items: center;
-  justify-content: end;
   margin-top: 30px;
 }
 
