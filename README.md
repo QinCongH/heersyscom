@@ -34,7 +34,7 @@ app.use(heersyscom)
 # 组件列表
 ##  HeTable
 基本使用
-```angular2html
+```vue
 <template>
     <HeTable :total="tableData.length" :column-data="columns" :table-data="tableData"></HeTable>
 </template>
@@ -77,11 +77,31 @@ app.use(heersyscom)
 ```
 
 
-<img src='https://gitee.com/qin_hu/drawingbed/raw/master/pic1.png'>
+<img src='https://gitee.com/qin_hu/drawingbed/raw/master/heersyscom/pic1.png'>
+
+### Props
+
+| 属性名称        | 说明     | 类型                                | 默认值 | 示例                            |
+|-------------|--------|-----------------------------------|-----|-------------------------------|
+| column-data | 表头数据   | Array<{label:string,prop:string}> | []  | [{label:"标题"},{prop:"title"}] |
+| table-data      | 表格数据   | Array< ColumnsPropObject >        | []  | [{title:"你好"}]                |
+| total      | 表格数据总数 | Number                            | 0   | -                             |
+
+### Emits
+
+| 属性名称 | 说明  | 类型 
+| ---- | --- | --- |
+|      |     |     | 
+
+### Slots
+
+| 属性名称 | 说明  | 子标签 |
+| ---- | --- |-----| 
+|      |     |     |  
 
 
 # 计划更新
-- [ ] HeTable
+- [ ] HeTable ~
 - [ ] HeForm
 - [ ] HeDialog
 - [ ] HeUpload
