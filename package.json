@@ -1,7 +1,7 @@
 {
   "name": "heersyscom",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "禾耳"
   },
@@ -15,6 +15,7 @@
     "@element-plus/icons-vue": "^2.3.1",
     "@types/node": "^22.10.2",
     "element-plus": "^2.9.1",
+    "vite-plugin-libcss": "^1.1.1",
     "vue": "^3.4.35"
   },
   "devDependencies": {
@@ -24,19 +25,14 @@
     "vue-tsc": "^2.0.29"
   },
   "exports": {
-
     ".": {
-
       "import": "./dist/heersyscom.es.js",
-
       "require": "./dist/heersyscom.umd.js"
-
     }
-
   },
-  "files": ["dist"],
-
+  "files": [
+    "dist"
+  ],
   "main": "dist/heersyscom.umd.js",
-
   "module": "dist/heersyscom.mjs"
 }

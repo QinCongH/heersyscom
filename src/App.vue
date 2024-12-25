@@ -33,5 +33,5 @@ const tableData = [
 ]
 </script>
 <template>
-  <HeTable pagination-position="right" :total="tableData.length" :column-data="columns" :table-data="tableData"></HeTable>
+  <HeTable   :showTooltip="false" :hide-summary-list="['no']" :showMultipleColumn="true" :showSummary="true" :loading="false" :maxMultipleNum="1" pagination-position="right" :total="tableData.length" :column-data="columns" :table-data="tableData"></HeTable>
 </template>

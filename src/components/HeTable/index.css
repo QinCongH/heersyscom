@@ -1,0 +1,34 @@
+.he-table .pagination {
+    width: 100%;
+    display: flex;
+    margin-top: 30px;
+}
+
+.he-table .chose-column {
+    display: flex;
+    justify-content: end;
+    margin-bottom: 15px;
+    /* //max-height: 300px; */
+    /* overflow-y: scroll; */
+}
+
+.he-table .dropdown {
+    max-height: 300px;
+    overflow: auto;
+}
+
+.he-table .el-table__body-wrapper {
+    max-height: 57vh;
+    overflow-y: scroll;
+}
+
+.he-table .el-table__body-wrapper::-webkit-scrollbar {
+    width: 0px;
+}
+.base-table.virtual .el-table__body-wrapper {
+    max-height: calc(100vh - 350px) !important;
+    overflow-y: scroll !important;
+}
+.base-table.virtual .el-table__body-wrapper::-webkit-scrollbar {
+    width: 0px;
+}

@@ -25,8 +25,6 @@ const emit = defineEmits([
   "editHandClick",
   "delHandClick",
   "addHandClick",
-  "handleSelectionChange",
-  "getSummaries",
   "sortChange",
   "select",
   //分页
@@ -405,100 +403,101 @@ function rowContextmenu(row, column, event) {
 
 <template>
   <!-- 选择列 -->
-  <div v-if="showMultipleColumn" class="chose-column">
-    <el-dropdown trigger="click" :hide-on-click="false">
-      <el-button>选择列</el-button>
-      <template #dropdown>
-        <el-dropdown-menu class="dropdown">
-          <el-dropdown-item>
-            <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
-            >全选
-            </el-checkbox
+  <div class="he-table">
+    <div v-if="showMultipleColumn" class="chose-column">
+      <el-dropdown trigger="click" :hide-on-click="false">
+        <el-button>选择列</el-button>
+        <template #dropdown>
+          <el-dropdown-menu class="dropdown">
+            <el-dropdown-item>
+              <el-checkbox v-model="checkAll" @change="handleCheckAllChange"
+              >全选
+              </el-checkbox
+              >
+            </el-dropdown-item>
+            <el-dropdown-item
+                v-for="(item, index) in pageData.columnList"
+                :key="index"
             >
-          </el-dropdown-item>
-          <el-dropdown-item
-              v-for="(item, index) in pageData.columnList"
-              :key="index"
-          >
-            <el-checkbox
-                v-model="item.initShow"
-                @change="handleRowClick({ ...item, index })"
-            >{{ item.label }}
-            </el-checkbox
-            >
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
-  </div>
-  <div class="base-table virtual">
-    <el-table
+              <el-checkbox
+                  v-model="item.initShow"
+                  @change="handleRowClick({ ...item, index })"
+              >{{ item.label }}
+              </el-checkbox
+              >
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+    </div>
+    <div class="base-table virtual">
+      <el-table
 
-        v-bind="{ ...tableConfig }"
-        ref="tableRef"
-        v-loading="loading"
-        :span-method="objectSpanMethodHandle"
-        :row-class-name="changRowStyle"
-        :header-cell-style="{ background: 'rgb(253 253 254)' }"
-        :showSummary="showSummary"
-        :show-overflow-tooltip="showTooltip"
-        sum-text="合计"
-        :border="true"
-        lazy
-        :data="tableData"
-        :stripe="stripe"
-        style="width: 100%"
-        :summary-method="getSummaries"
-        @current-change="tableCurrentChange"
-        @select="select"
-        @select-all="selectAll"
-        @row-click="handleRowClick"
-        @sort-change="sortChange"
-        @row-contextmenu="rowContextmenu"
-    >
-      <!-- 多选 -->
-      <el-table-column
-          v-if="showMultiple"
-          :selectable="selectEnable"
-          type="selection"
-          width="55"
-      />
-      <HeaderTable :columnData="pageData.showColumnList">
-        <!-- 操作 -->
-        <!-- 动态表头 插槽名称：prop字段+'Header'  最多支持二级-->
-        <template #propHeader="data">
-          <slot :name="`${data.data?.prop}Header`" :data="data.data">
-            {{ data.data.label }}
-          </slot>
-        </template>
-        <!-- 动态表列 插槽名称：prop字段+'Default' 最多支持二级-->
-        <template #propDefault="obj">
-          <slot :name="`${obj.data.prop}Default`" :data="obj.data">
-            {{ obj.data.row[obj.data.prop] }}
-          </slot>
-        </template>
-      </HeaderTable>
-      <Operate
-          v-if="showOperate"
-          :loading="loading"
-          :operateWidth="operateWidth"
-          :operateType="operateType"
-          :operateList="operateList"
-          fixed="right"
-          @addHandClick="addHandClick"
-          @delHandClick="delHandClick"
-          @editHandClick="editHandClick"
+          v-bind="{ ...tableConfig }"
+          ref="tableRef"
+          v-loading="loading"
+          :span-method="objectSpanMethodHandle"
+          :row-class-name="changRowStyle"
+          :header-cell-style="{ background: 'rgb(253 253 254)' }"
+          :showSummary="showSummary"
+          :show-overflow-tooltip="showTooltip"
+          sum-text="合计"
+          :border="true"
+          lazy
+          :data="tableData"
+          :stripe="stripe"
+          style="width: 100%"
+          :summary-method="getSummaries"
+          @current-change="tableCurrentChange"
+          @select="select"
+          @select-all="selectAll"
+          @row-click="handleRowClick"
+          @sort-change="sortChange"
+          @row-contextmenu="rowContextmenu"
       >
-        <!-- 添加更多操作 -->
-        <template #more="{ data }">
-          <!-- {{ data }} -->
-          <slot name="moreOperate" :data="{ $index: data }"/>
-        </template>
-      </Operate>
-    </el-table>
+        <!-- 多选 -->
+        <el-table-column
+            v-if="showMultiple"
+            :selectable="selectEnable"
+            type="selection"
+            width="55"
+        />
+        <HeaderTable :columnData="pageData.showColumnList">
+          <!-- 操作 -->
+          <!-- 动态表头 插槽名称：prop字段+'Header'  最多支持二级-->
+          <template #propHeader="data">
+            <slot :name="`${data.data?.prop}Header`" :data="data.data">
+              {{ data.data.label }}
+            </slot>
+          </template>
+          <!-- 动态表列 插槽名称：prop字段+'Default' 最多支持二级-->
+          <template #propDefault="obj">
+            <slot :name="`${obj.data.prop}Default`" :data="obj.data">
+              {{ obj.data.row[obj.data.prop] }}
+            </slot>
+          </template>
+        </HeaderTable>
+        <Operate
+            v-if="showOperate"
+            :loading="loading"
+            :operateWidth="operateWidth"
+            :operateType="operateType"
+            :operateList="operateList"
+            fixed="right"
+            @addHandClick="addHandClick"
+            @delHandClick="delHandClick"
+            @editHandClick="editHandClick"
+        >
+          <!-- 添加更多操作 -->
+          <template #more="{ data }">
+            <!-- {{ data }} -->
+            <slot name="moreOperate" :data="{ $index: data }"/>
+          </template>
+        </Operate>
+      </el-table>
 
-  </div>
-  <div v-show="showPagination" :style="{
+    </div>
+    <div v-show="showPagination" :style="{
     alignItems: 'center',
     justifyContent:new Map([
         ['left','flex-start'],
@@ -506,60 +505,30 @@ function rowContextmenu(row, column, event) {
         ['right','flex-end'],
     ]).get(paginationPosition)
   }" class="pagination">
-    <!-- hide-on-single-page 只有一页时隐藏 -->
-    <el-pagination
-        :current-page="pageNum"
-        :page-size="pageSize"
-        :page-sizes="pageSizes"
-        :hide-on-single-page="false"
-        :small="false"
-        :disabled="loading"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="total"
-        @size-change="handleSizeChange"
-        @current-change="handleCurrentChange"
-    />
+      <!-- hide-on-single-page 只有一页时隐藏 -->
+      <el-pagination
+          :current-page="pageNum"
+          :page-size="pageSize"
+          :page-sizes="pageSizes"
+          :hide-on-single-page="false"
+          :small="false"
+          :disabled="loading"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
+
+
 </template>
 
-<style scoped>
-.pagination {
-  width: 100%;
-  display: flex;
-  margin-top: 30px;
-}
-
-.chose-column {
-  display: flex;
-  justify-content: end;
-  margin-bottom: 15px;
-  /* //max-height: 300px; */
-  /* overflow-y: scroll; */
-}
-
-.dropdown {
-  max-height: 300px;
-  overflow: auto;
-}
-
-:v-deep(.el-table__body-wrapper) {
-  max-height: 57vh !important;
-  overflow-y: scroll !important;
-
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
-}
+<style>
+@import "./index.css";
 </style>
 <style>
-.base-table.virtual .el-table__body-wrapper {
-  max-height: calc(100vh - 350px) !important;
-  overflow-y: scroll !important;
 
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
-}
 </style>
 <!--
 

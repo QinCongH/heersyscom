@@ -1,9 +1,10 @@
 import {defineConfig} from 'vite'
 import vue from '@vitejs/plugin-vue'
 import * as path from "node:path";
+import libCss from 'vite-plugin-libcss';
 
 export default defineConfig({
-    plugins: [vue()],
+    plugins: [vue(), libCss()],
     resolve: {
         alias: {
             '@': path.resolve(__dirname, 'src'), // 配置 @ 指向 src 目录

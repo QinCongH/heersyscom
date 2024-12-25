@@ -1,3 +1,5 @@
+// 导入样式
+import "../components/HeTable/index.css"
 //导入组件
 
 import HeTable from "./componenets/HeTable/index.ts"
